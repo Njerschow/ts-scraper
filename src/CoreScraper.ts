@@ -3,7 +3,7 @@ import * as jsdom from "jsdom";
 import * as ParseUrl from "parse-url";
 import * as Request from "request";
 import { CoreJob, JobRunner } from "ts-jobrunner";
-import ScrapResponse from "./contracts/ScrapeResponse";
+import ScrapeResponse from "./contracts/ScrapeResponse";
 import ScrapperContracts from "./contracts/ScrapperContracts";
 
 abstract class CoreScraper implements ScrapperContracts {
@@ -26,7 +26,7 @@ abstract class CoreScraper implements ScrapperContracts {
         this.init();
     }
 
-    public onScrapResponse(response: ScrapResponse, parentLink: string) {
+    public onScrapeResponse(response: ScrapeResponse, parentLink: string) {
         this.completedLinks.push(parentLink);
         this.onFetchComplete(parentLink, response);
         const links = response.links;
@@ -83,12 +83,12 @@ abstract class CoreScraper implements ScrapperContracts {
         return url && url.indexOf(parsedUrl.resource) !== -1;
     }
 
-    protected doesUrlContain(response: ScrapResponse, regex: RegExp): boolean {
+    protected doesUrlContain(response: ScrapeResponse, regex: RegExp): boolean {
         const matches = response.url.match(regex);
         return !!(matches && matches.length);
     }
 
-    protected abstract onFetchComplete(link: string, response: ScrapResponse);
+    protected abstract onFetchComplete(link: string, response: ScrapeResponse);
     protected abstract canFetchUrl(url: string): boolean;
     protected abstract createJob(link: string): CoreJob;
     protected abstract init(): void;
